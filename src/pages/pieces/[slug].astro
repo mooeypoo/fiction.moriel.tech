@@ -1,21 +1,311 @@
 ---
-// Phase 2 placeholder: unstyled, only to check the converted content renders. Replaced in Phase 3.
-import { getCollection, render } from 'astro:content'
+import { render } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import ListenButton from '../../components/ListenButton.astro'
+import ListenPlayer from '../../components/ListenPlayer.astro'
+import PlaneMark from '../../components/PlaneMark.astro'
+import { getBuiltPieces, getListedPieces, type Piece } from '../../lib/content'
+import { formatDate, getPiecePath, getPoemLineCount, getReadingMinutes, getTagPath, getTypeInfo, getWordCount } from '../../lib/pieces'
+import { AUTHOR, SITE_TITLE, SITE_URL } from '../../lib/site'
+import { isListed } from '../../lib/visibility'
 
 export async function getStaticPaths() {
-  const pieces = await getCollection('pieces', ({ data }) => import.meta.env.DEV || !data.draft)
-  return pieces.map((piece) => ({ params: { slug: piece.id }, props: { piece } }))
+  return (await getBuiltPieces()).map((piece) => ({ params: { slug: piece.id }, props: { piece } }))
+}
+
+interface Props {
+  piece: Piece
 }
 
 const { piece } = Astro.props
+const { data } = piece
 const { Content } = await render(piece)
+const type = getTypeInfo(data.type)
+const body = piece.body ?? ''
+const words = getWordCount(body)
+const length = data.type === 'poem' ? `${getPoemLineCount(body)} lines` : `${getReadingMinutes(body)} min read`
+const listed = isListed(data, import.meta.env.DEV)
+
+// Older and newer pieces of any type; unlisted pieces aren't part of the sequence.
+const sequence = listed ? await getListedPieces() : []
+const index = sequence.findIndex((other) => other.id === piece.id)
+const newer = index > 0 ? sequence[index - 1] : undefined
+const older = index >= 0 ? sequence[index + 1] : undefined
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  headline: data.title,
+  genre: type.plural,
+  description: data.excerpt,
+  datePublished: data.date.toISOString(),
+  url: `${SITE_URL}${getPiecePath(piece.id)}`,
+  keywords: data.tags.join(', ') || undefined,
+  author: { '@type': 'Person', name: AUTHOR, url: 'https://moriel.tech' },
+  isPartOf: { '@type': 'WebSite', name: SITE_TITLE, url: SITE_URL },
+}
 ---
-<html lang="en">
-  <head><meta charset="utf-8" /><title>{piece.data.title}</title></head>
-  <body>
-    <article>
-      <header class="post-header"><h1>{piece.data.title}</h1></header>
-      <div class="post-content"><Content /></div>
-    </article>
-  </body>
-</html>
+
+<BaseLayout title={data.title} description={data.excerpt} card={`pieces/${piece.id}`} ogType="article" noindex={!listed}>
+  <Fragment slot="head">
+    <meta property="article:published_time" content={data.date.toISOString()} />
+    {data.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <article class:list={['piece', `piece-${data.type}`]}>
+    <header class="piece-header">
+      <p class="label"><a class="label-accent" href={type.path}>{type.label}</a></p>
+      <h1>{data.title}</h1>
+      <div class="piece-meta">
+        <span><time datetime={data.date.toISOString()}>{formatDate(data.date)}</time> · {length}</span>
+        {data.listen && <ListenButton words={words} />}
+      </div>
+      {data.note && <p class="piece-note">{data.note}</p>}
+    </header>
+
+    {data.listen && <ListenPlayer slug={piece.id} words={words} />}
+
+    <div class="piece-content">
+      <Content />
+    </div>
+
+    <footer class="piece-footer">
+      <PlaneMark size={26} class="end-mark" />
+      {data.tags.length > 0 && (
+        <ul class="tags" aria-label="Tags">
+          {data.tags.map((tag) => <li><a href={getTagPath(tag)}>{tag}</a></li>)}
+        </ul>
+      )}
+      {(older || newer) && (
+        <nav class="sequence" aria-label="More pieces">
+          {older ? (
+            <a href={getPiecePath(older.id)}>
+              <span class="label">← Older</span>
+              <span class="sequence-title">{older.data.title}</span>
+            </a>
+          ) : <span />}
+          {newer && (
+            <a class="sequence-newer" href={getPiecePath(newer.id)}>
+              <span class="label">Newer →</span>
+              <span class="sequence-title">{newer.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .piece {
+    max-width: var(--measure);
+    margin: 0 auto;
+  }
+
+  .piece-header {
+    margin-bottom: 2.75rem;
+    text-align: center;
+  }
+
+  .piece-header .label {
+    margin: 0 0 0.75rem;
+  }
+
+  .piece-header .label a {
+    text-decoration: none;
+  }
+
+  .piece-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .piece-note {
+    display: inline-block;
+    margin: 1.25rem 0 0;
+    padding: 0.15rem 0.85rem;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+
+  /* Long-form prose: a comfortable measure, generous leading, hyphenation on narrow screens. */
+  .piece-content {
+    font-size: 1.2rem;
+    line-height: 1.75;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  .piece-content :global(p) {
+    margin: 0 0 1.15em;
+  }
+
+  /*
+   * Stories and flash fiction open with the first line in small caps, as books often do. Not a
+   * drop cap: many pieces open with a one-line paragraph of dialogue, which a float would break.
+   */
+  .piece-story .piece-content > :global(p:first-child::first-line),
+  .piece-flash .piece-content > :global(p:first-child::first-line) {
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.05em;
+  }
+
+  .piece-story .piece-content > :global(p:first-child::first-letter),
+  .piece-flash .piece-content > :global(p:first-child::first-letter) {
+    color: var(--accent);
+    font-family: var(--display);
+    font-size: 1.5em;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* Poems: every line and stanza exactly as written; long lines wrap with a hanging indent. */
+  .piece-poem .piece-content {
+    hyphens: manual;
+    line-height: 1.65;
+  }
+
+  .piece-poem .piece-content :global(p) {
+    margin-bottom: 1.9em;
+  }
+
+  .piece-poem .piece-content :global(.line) {
+    display: block;
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+
+  .piece-poem .piece-content :global(.line + br) {
+    display: none;
+  }
+
+  /* Scene breaks. */
+  .piece-content :global(hr) {
+    margin: 2.5em 0;
+    border: 0;
+    text-align: center;
+    overflow: visible;
+  }
+
+  .piece-content :global(hr)::after {
+    content: '*\2003*\2003*';
+    color: var(--accent);
+    font-size: 1.1em;
+  }
+
+  .piece-content :global(blockquote) {
+    margin: 1.5em 0;
+    padding: 0 0 0 1.25em;
+    border-left: 2px solid var(--rule);
+    font-style: italic;
+  }
+
+  .piece-content :global(h2) {
+    font-size: 1.3rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .piece-content :global(.author-note) {
+    margin: 0 0 2.5em;
+    padding: 1.25rem 1.5rem 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--surface);
+    font-size: 0.92em;
+    line-height: 1.65;
+    hyphens: manual;
+  }
+
+  /* While listening, the paragraph being read. */
+  .piece-content :global(.is-being-read) {
+    background: var(--highlight);
+    box-shadow: 0 0 0 0.35em var(--highlight);
+    border-radius: 2px;
+  }
+
+  .piece-footer {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .piece-footer :global(.end-mark) {
+    color: var(--muted);
+  }
+
+  .tags {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .tags a {
+    display: inline-block;
+    padding: 0.1rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+
+  .tags a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .sequence {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    text-align: left;
+  }
+
+  .sequence a {
+    display: flex;
+    flex-direction: column;
+    max-width: 48%;
+    text-decoration: none;
+  }
+
+  .sequence-newer {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .sequence-title {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    color: var(--text);
+  }
+
+  .sequence a:hover .sequence-title {
+    color: var(--accent);
+  }
+
+  @media (max-width: 480px) {
+    .piece-content {
+      font-size: 1.1rem;
+    }
+
+    .piece-poem .piece-content :global(.line) {
+      padding-left: 1.25em;
+      text-indent: -1.25em;
+    }
+  }
+</style>

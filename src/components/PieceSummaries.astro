@@ -1,0 +1,71 @@
+---
+// Pieces with their opening lines, for the type and tag pages.
+import type { Piece } from '../lib/content'
+import { formatDate, getPiecePath, getTypeInfo } from '../lib/pieces'
+
+interface Props {
+  pieces: Piece[]
+  showType?: boolean
+}
+
+const { pieces, showType = false } = Astro.props
+---
+
+<ol class="summaries">
+  {pieces.map((piece) => (
+    <li class:list={['summary', { 'summary-poem': piece.data.type === 'poem' }]}>
+      <p class="label">
+        {showType && <span class="label-accent">{getTypeInfo(piece.data.type).label} · </span>}
+        <time datetime={piece.data.date.toISOString()}>{formatDate(piece.data.date)}</time>
+      </p>
+      <h2><a href={getPiecePath(piece.id)}>{piece.data.title}</a></h2>
+      <p class="summary-excerpt">{piece.data.excerpt}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .summaries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .summary {
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .summary:first-child {
+    border-top: 0;
+    padding-top: 0.5rem;
+  }
+
+  .label {
+    margin: 0 0 0.35rem;
+  }
+
+  h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.6rem;
+  }
+
+  h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  h2 a:hover {
+    color: var(--accent);
+  }
+
+  .summary-excerpt {
+    max-width: var(--measure);
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .summary-poem .summary-excerpt {
+    font-style: italic;
+  }
+</style>

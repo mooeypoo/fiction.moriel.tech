@@ -1,0 +1,21 @@
+{
+  "name": "listen-audio",
+  "private": true,
+  "type": "module",
+  "description": "Generates the Listen audio for built pieces (docs/AUDIO.md). Kept apart from the site so Netlify builds don't install it.",
+  "scripts": {
+    "generate": "node --experimental-strip-types generate.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
+    "@huggingface/transformers": "3.8.1",
+    "kokoro-js": "1.2.1",
+    "linkedom": "0.18.13"
+  },
+  "overrides": {
+    "sharp": "0.35.5"
+  }
+}

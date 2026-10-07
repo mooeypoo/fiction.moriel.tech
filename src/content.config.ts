@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs'
 import { glob } from 'astro/loaders'
 import { defineCollection } from 'astro:content'
 import { z } from 'astro/zod'
+import { PIECE_TYPES } from './lib/pieces.ts'
 
 const DATE_PREFIX = /^\d{4}-\d{2}(-\d{2})?-/
 const pieceIdSources = new Map<string, string>()
@@ -21,9 +22,6 @@ function generatePieceId({ entry, base, data }: { entry: string; base: URL; data
 
   return id
 }
-
-export const PIECE_TYPES = ['story', 'flash', 'poem'] as const
-export type PieceType = (typeof PIECE_TYPES)[number]
 
 // Shared by pieces and pages (docs/FRONTMATTER.md).
 const visibility = {

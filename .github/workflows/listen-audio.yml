@@ -1,0 +1,102 @@
+name: Listen audio
+
+# Generates audio for new or changed pieces and publishes it to this repo's GitHub Pages
+# (docs/AUDIO.md). Nothing is committed: the published site is downloaded, updated, redeployed.
+on:
+  push:
+    branches:
+      - main
+    # Anything that can change what the player reads.
+    paths:
+      - 'src/**'
+      - 'astro.config.mjs'
+      - 'package-lock.json'
+      - 'tools/listen-audio/**'
+      - '.github/workflows/listen-audio.yml'
+  workflow_dispatch:
+    inputs:
+      regenerate:
+        description: 'Piece slugs to regenerate (space-separated), or "all"'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+# One publish at a time; a newer run waits instead of cancelling a deploy halfway.
+concurrency:
+  group: listen-audio
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    # The blog's full regeneration (375 paragraphs) takes about 40 minutes; this site has fewer.
+    timeout-minutes: 350
+    outputs:
+      changed: ${{ steps.generate.outputs.changed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/listen-audio/package-lock.json
+      - name: Build the site
+        run: |
+          npm ci
+          npm run build
+      - name: Install the generator
+        run: npm run audio:install
+      - name: Cache the voice model
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: tools/listen-audio/.cache
+          # Matches MODEL_REVISION in generate.mjs.
+          key: kokoro-1939ad2a8e416c0acfeecc08a694d14ef25f2231
+      # Generated paragraphs are saved even when a run fails or times out, so the next run
+      # resumes instead of starting over. Segments are named by content, so any cached one is valid.
+      - name: Restore generated paragraphs
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: audio-site/segments
+          key: listen-segments-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: listen-segments-
+      - name: Generate audio
+        id: generate
+        env:
+          REGENERATE: ${{ inputs.regenerate }}
+        run: |
+          args=(--from https://mooeypoo.github.io/fiction.moriel.tech/ --out "$GITHUB_WORKSPACE/audio-site")
+          if [ -n "$REGENERATE" ]; then args+=(--regenerate "$REGENERATE"); fi
+          npm run audio -- "${args[@]}"
+      - name: Save generated paragraphs
+        if: always()
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: audio-site/segments
+          key: listen-segments-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Package for Pages
+        if: steps.generate.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: audio-site
+
+  deploy:
+    needs: generate
+    if: needs.generate.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    # Only this job can publish, and only through OIDC; no long-lived secrets.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

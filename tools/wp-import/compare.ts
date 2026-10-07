@@ -49,6 +49,8 @@ function tokens(root: Element) {
   const walk = (node: Node) => {
     for (const child of [...node.childNodes]) {
       if (child.nodeType === 3) line += child.textContent
+      // The site's "(opens in a new tab)" hints for screen readers aren't content.
+      else if ((child as Element).classList?.contains('sr-only')) continue
       else if (child.nodeName === 'BR') endLine()
       else if (child.nodeName === 'HR') {
         endBlock()
@@ -119,7 +121,7 @@ let poemFailures = 0
 for (const post of posts) {
   const original = tokens(body(wpautop(post.content)))
   const page = parseHTML(readFileSync(new URL(`${post.slug}/index.html`, DIST), 'utf8')).document
-  const built = tokens(page.querySelector('.post-content')!)
+  const built = tokens(page.querySelector('.piece-content')!)
   const changes = diff(original, built)
   const [o, b] = [shape(original), shape(built)]
   const isPoem = post.categories.includes('poem')

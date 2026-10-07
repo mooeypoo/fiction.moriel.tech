@@ -1,0 +1,73 @@
+---
+import { Font } from 'astro:assets'
+import '../styles/global.css'
+import SiteFooter from '../components/SiteFooter.astro'
+import SiteHeader from '../components/SiteHeader.astro'
+import { AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SITE_URL, toAbsoluteUrl } from '../lib/site'
+import { CARD_HEIGHT, CARD_WIDTH, getCardUrl } from '../lib/social-cards'
+import { themeInitScript } from '../lib/theme-init.mjs'
+
+interface Props {
+  /** Page title; the site name is appended. Omit on the home page. */
+  title?: string
+  description?: string
+  /** A social card path (see lib/social-cards); defaults to the home card. */
+  card?: string
+  ogType?: 'website' | 'article'
+  /** Unlisted pages (docs/FRONTMATTER.md) ask search engines not to index them. */
+  noindex?: boolean
+  /** false for pages with no URL of their own (the 404 page). */
+  canonical?: boolean
+}
+
+const { title, description = SITE_DESCRIPTION, card = 'home', ogType = 'website', noindex = false, canonical: hasCanonical = true } = Astro.props
+const fullTitle = title ? `${title} · ${SITE_TITLE}` : `${SITE_TITLE}: ${SITE_DESCRIPTION.replace(/\.$/, '')}`
+const canonical = new URL(Astro.url.pathname, SITE_URL).href
+const image = toAbsoluteUrl(getCardUrl(card))
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* First in <head>: it runs before any stylesheet loads, so it never waits on one. */}
+    <script is:inline set:html={themeInitScript} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={AUTHOR} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {hasCanonical && <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content="#f7f2e8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14131c" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:locale" content="en_US" />
+    {hasCanonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:title" content={title ?? SITE_TITLE} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:alt" content={title ?? SITE_TITLE} />
+    <meta property="og:image:width" content={String(CARD_WIDTH)} />
+    <meta property="og:image:height" content={String(CARD_HEIGHT)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@mooeypoo" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+    <Font cssVariable="--font-literata" preload={[{ weight: '400', style: 'normal', subset: 'latin' }]} />
+    <Font cssVariable="--font-fraunces" preload={[{ weight: '600', style: 'normal', subset: 'latin' }]} />
+
+    <script defer data-domain="fiction.moriel.tech" src="https://plausible.io/js/script.outbound-links.js"></script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <SiteHeader />
+    <main id="content">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

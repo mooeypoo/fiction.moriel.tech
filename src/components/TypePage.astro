@@ -1,0 +1,32 @@
+---
+// /stories, /flash, /poems: one page per type.
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PieceSummaries from './PieceSummaries.astro'
+import { getListedPieces } from '../lib/content'
+import { getTypeInfo, type PieceType } from '../lib/pieces'
+
+interface Props {
+  type: PieceType
+}
+
+const info = getTypeInfo(Astro.props.type)
+const pieces = await getListedPieces(info.type)
+---
+
+<BaseLayout title={info.plural} description={info.description} card={info.path.slice(1)}>
+  <header class="page-header">
+    <h1>{info.plural}</h1>
+    <p>{info.description} <a href={`${info.path}/rss.xml`}>RSS</a></p>
+  </header>
+  <PieceSummaries pieces={pieces} />
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header p {
+    color: var(--muted);
+  }
+</style>
