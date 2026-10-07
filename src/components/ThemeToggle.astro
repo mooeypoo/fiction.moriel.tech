@@ -1,0 +1,94 @@
+---
+// Switches between light and dark. The page follows the system theme until a reader picks one;
+// the choice is saved and applied before the first paint by lib/theme-init.mjs.
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch theme">
+  <!-- Both icons render; CSS shows the right one before the script runs (styles/global.css). -->
+  <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4.5" />
+    <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8" />
+  </svg>
+  <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" />
+  </svg>
+</button>
+
+<script>
+  type Theme = 'light' | 'dark'
+
+  const root = document.documentElement
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)')
+  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')!
+
+  function current(): Theme {
+    const chosen = root.dataset.theme
+    if (chosen === 'light' || chosen === 'dark') return chosen
+    return systemDark.matches ? 'dark' : 'light'
+  }
+
+  function render() {
+    const label = current() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+    button.setAttribute('aria-label', label)
+    button.title = label
+  }
+
+  function apply(theme: Theme) {
+    root.dataset.theme = theme
+    render()
+  }
+
+  button.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark'
+    apply(next)
+    try {
+      localStorage.setItem('theme', next)
+    } catch {}
+  })
+  systemDark.addEventListener('change', render)
+  // Keeps other open tabs in step.
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'theme' && (event.newValue === 'light' || event.newValue === 'dark')) apply(event.newValue)
+  })
+  render()
+</script>
+
+<style>
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--rule);
+    color: var(--accent);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .icon-moon {
+    fill: currentColor;
+    stroke: none;
+  }
+</style>

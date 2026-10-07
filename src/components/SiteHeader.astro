@@ -1,5 +1,5 @@
 ---
-import ThemeToggle from './ThemeToggle.vue'
+import ThemeToggle from './ThemeToggle.astro'
 import Wordmark from './Wordmark.astro'
 import { TYPES } from '../lib/pieces'
 import { CONTACT_URL } from '../lib/site'
@@ -23,7 +23,7 @@ const isCurrent = (href: string) => current === href || current.startsWith(`${hr
         <li><a href={CONTACT_URL}>Contact</a></li>
       </ul>
     </nav>
-    <ThemeToggle client:idle />
+    <ThemeToggle />
   </div>
 </header>
 

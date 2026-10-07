@@ -2,7 +2,7 @@
 
 Guidance for AI coding agents working in this repo (Claude Code reads it through `CLAUDE.md`).
 
-fiction.moriel.tech ("Imaginary Parts") is Moriel Schottlender's fiction site: stories, flash fiction, and poems. A static Astro site with Vue islands, on Netlify, written in Markdown. Readability, performance, and minimal client-side JavaScript are the priorities. Its conventions follow [blog.moriel.tech](https://github.com/mooeypoo/blog.moriel.tech); its design doesn't.
+fiction.moriel.tech ("Imaginary Parts") is Moriel Schottlender's fiction site: stories, flash fiction, and poems. A static Astro site on Netlify, written in Markdown, with a little plain TypeScript where it needs interaction (theme toggle, Listen player). Readability, performance, and minimal client-side JavaScript are the priorities. Its conventions follow [blog.moriel.tech](https://github.com/mooeypoo/blog.moriel.tech); its design doesn't.
 
 ## Read first
 

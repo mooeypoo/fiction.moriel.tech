@@ -2,7 +2,6 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { defineConfig, fontProviders } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
-import vue from '@astrojs/vue'
 import { satteri } from '@astrojs/markdown-satteri'
 import { openExternalLinksInNewTab, wrapLines } from './src/lib/markdown-plugins.mjs'
 import { themeInitHash } from './src/lib/theme-init.mjs'
@@ -93,5 +92,5 @@ export default defineConfig({
       hastPlugins: [wrapLines, openExternalLinksInNewTab(SITE)],
     }),
   },
-  integrations: [sitemap({ filter: (page) => !unlisted.has(page) && !page.endsWith('/404/') }), vue()],
+  integrations: [sitemap({ filter: (page) => !unlisted.has(page) && !page.endsWith('/404/') })],
 })
