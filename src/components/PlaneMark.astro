@@ -1,0 +1,44 @@
+---
+// The site's mark: the complex plane, with a quarter turn from 1 to i (multiplying by i rotates
+// a quarter turn). The origin sits off-center so it never reads as a crosshair.
+interface Props {
+  size?: number
+  class?: string
+}
+
+const { size = 28, class: className } = Astro.props
+---
+
+<svg class:list={['plane-mark', className]} width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+  <path class="plane-mark-axes" d="M3 23h26M9 30V3" />
+  <path class="plane-mark-turn" d="M25 23A16 16 0 0 0 9 7" />
+  <circle class="plane-mark-one" cx="25" cy="23" r="1.8" />
+  <circle class="plane-mark-i" cx="9" cy="7" r="2.8" />
+</svg>
+
+<style>
+  .plane-mark {
+    flex-shrink: 0;
+    fill: none;
+    stroke-linecap: round;
+  }
+
+  .plane-mark-axes {
+    stroke: currentColor;
+    stroke-width: 1.4;
+    opacity: 0.55;
+  }
+
+  .plane-mark-turn {
+    stroke: var(--accent);
+    stroke-width: 1.8;
+  }
+
+  .plane-mark-one {
+    fill: currentColor;
+  }
+
+  .plane-mark-i {
+    fill: var(--accent);
+  }
+</style>

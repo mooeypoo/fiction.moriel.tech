@@ -1,0 +1,82 @@
+---
+import PlaneMark from './PlaneMark.astro'
+import { AUTHOR, CONTACT_URL, ELSEWHERE, SITE_SUBTITLE, SITE_TITLE } from '../lib/site'
+
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-about">
+      <p class="footer-title"><PlaneMark size={22} /> {SITE_TITLE}</p>
+      <p>{SITE_SUBTITLE}, by {AUTHOR}.</p>
+      <p class="footer-meta">
+        <a href="/rss.xml">RSS</a> · <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" class="external-link">Contact<span class="sr-only"> (opens in a new tab)</span></a>
+      </p>
+      <p class="footer-meta">© {year} {AUTHOR}</p>
+    </div>
+    <nav aria-label="Elsewhere">
+      <p class="label">Elsewhere</p>
+      <ul>
+        {ELSEWHERE.map((link) => (
+          <li>
+            <a href={link.href} target="_blank" rel="noopener noreferrer" class="external-link">
+              {link.label}<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+    font-size: 0.95rem;
+  }
+
+  .footer-inner {
+    max-width: var(--wide);
+    margin: 0 auto;
+    padding: 2.5rem var(--gutter) 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem 4rem;
+  }
+
+  .footer-about p {
+    margin: 0 0 0.35rem;
+  }
+
+  .footer-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .footer-meta {
+    color: var(--muted);
+  }
+
+  nav .label {
+    margin: 0 0 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2;
+    column-gap: 2.5rem;
+  }
+
+  li {
+    margin-bottom: 0.3rem;
+  }
+</style>

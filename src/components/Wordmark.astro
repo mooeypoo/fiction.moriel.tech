@@ -1,0 +1,25 @@
+---
+import PlaneMark from './PlaneMark.astro'
+---
+
+<span class="wordmark">
+  <PlaneMark />
+  <span class="wordmark-text"><em>Imaginary</em> Parts</span>
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  em {
+    font-weight: 400;
+  }
+</style>
