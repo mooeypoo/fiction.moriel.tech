@@ -14,9 +14,10 @@ npm run test:site  # checks on the built site
 
 - [docs/FRONTMATTER.md](docs/FRONTMATTER.md): every field a piece or page can use.
 - [docs/AUDIO.md](docs/AUDIO.md): the Listen audio, and its one-time setup.
+- [docs/LAUNCH.md](docs/LAUNCH.md): what's left before the site replaces lit.smarterthanthat.com.
 - [AGENTS.md](AGENTS.md): layout, conventions, and what's easy to break.
 - `tools/wp-import/`: the one-off WordPress migration, kept for reference.
 
 ## Redirects from the old site
 
-`public/_redirects` sends every lit.smarterthanthat.com URL (posts, category and tag archives, feeds, `?p=` links) to its new home, with a 301. For it to apply, **lit.smarterthanthat.com must be a domain alias of this Netlify site** (Domain management → Add a domain alias), with its DNS pointing at Netlify. Old image URLs end on the 404 page; the images weren't migrated.
+`public/_redirects` sends every lit.smarterthanthat.com URL (posts, category and tag archives, feeds, `?p=` links) to its new home, with a 301. For it to apply, **lit.smarterthanthat.com must be a domain alias of this Netlify site**, with its DNS pointing at Netlify; that's part of the switch in [docs/LAUNCH.md](docs/LAUNCH.md). Old image URLs end on the 404 page; the images weren't migrated.
