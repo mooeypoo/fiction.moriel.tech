@@ -19,8 +19,9 @@ const isCurrent = (href: string) => current === href || current.startsWith(`${hr
         {links.map((link) => (
           <li><a href={link.href} aria-current={isCurrent(link.href) ? 'page' : undefined}>{link.label}</a></li>
         ))}
+        <li><a href="/about" aria-current={isCurrent('/about') ? 'page' : undefined}>About</a></li>
         {/* Like blog.moriel.tech, header links stay in the same tab, even to other sites. */}
-        <li><a href={CONTACT_URL}>Contact</a></li>
+        <li class="nav-contact"><a href={CONTACT_URL}>Contact</a></li>
       </ul>
     </nav>
     <ThemeToggle />
@@ -79,11 +80,21 @@ const isCurrent = (href: string) => current === href || current.startsWith(`${hr
     }
 
     nav ul {
-      gap: 0.25rem 0.85rem;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 0.5rem;
     }
 
     nav a {
-      font-size: 0.92rem;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+  }
+
+  /* Seven links don't fit a phone's width; Contact is also in the footer and on About. */
+  @media (max-width: 480px) {
+    .nav-contact {
+      display: none;
     }
   }
 </style>

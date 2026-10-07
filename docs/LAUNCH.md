@@ -5,7 +5,7 @@ What's left before fiction.moriel.tech fully replaces the WordPress site at lit.
 ## Before the switch
 
 - [ ] **Netlify:** the repo is connected and fiction.moriel.tech points at it. Build settings come from `netlify.toml`.
-- [ ] **About page:** rewrite `src/content/pages/about.md`, then remove `unlisted: true` and the `note`, and add it to the header or footer nav.
+- [x] **About page:** rewritten, published, and in the header nav.
 - [ ] **Dead link:** "The Summer I was Seventeen" links to ESRA Magazine, whose domain is now for sale. Unlink it, or point it at an archived copy.
 - [ ] **Old links (optional):** the loc.gov, americanpoems.com, and Stony Brook links in the pieces still work, but through redirects; they can be updated to their current URLs.
 - [ ] **Images (optional):** none were migrated. The old ones, with their alt text and credits, are listed in `tools/wp-import/report.json`. New ones go in `src/assets/`.
