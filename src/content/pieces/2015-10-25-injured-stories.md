@@ -6,7 +6,8 @@ type: poem
 tags: []
 excerpt: "No matter how many times I try I can't stop constructing Poems / as if they're injured stories / with broken sentences"
 ---
-No matter how many times I try I can't stop constructing Poems\
+No matter how many times I try I can't\
+stop constructing Poems\
 as if they're injured stories\
 with broken sentences
 
@@ -18,7 +19,8 @@ accurately\
 carrying\
 a cadence
 
-No matter how many times I try I can't stop pitying\
+No matter how many times I try I can't\
+stop pitying\
 their pain\
 or imagining their frustration\
 the longing to be whole again\
