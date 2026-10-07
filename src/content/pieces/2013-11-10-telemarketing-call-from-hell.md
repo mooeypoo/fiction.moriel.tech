@@ -12,7 +12,6 @@ tags:
 excerpt: "Julie Thorn is a secretary at a big corporation with an annoying boss and a boring routine, until one day she gets a telemarketing call that changes her life forever."
 note: "Working draft"
 ---
-Julie Thorn is a secretary at a big corporation with an annoying boss and a boring routine, until one day she gets a telemarketing call that changes her life forever.
 
 <aside class="author-note">
 
