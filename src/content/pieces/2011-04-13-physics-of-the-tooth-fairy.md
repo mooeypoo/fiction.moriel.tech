@@ -25,5 +25,3 @@ I summarized everything and reached the conclusion.
 It was the first scientific experiment I have devised.
 
 It was the best gift the tooth fairy gave me.
-
-Image Credit: [Jenn and Tony Bot](http://www.flickr.com/photos/ittybittiesforyou/4676167903/) via Flickr

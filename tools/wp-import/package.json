@@ -2,10 +2,11 @@
   "name": "wp-import",
   "private": true,
   "type": "module",
-  "description": "One-off WordPress (WXR) to Markdown migration for lit.smarterthanthat.com. Kept apart from the site so Netlify builds don't install it.",
+  "description": "One-off WordPress (WXR) to Markdown migration for lit.smarterthanthat.com, and the redirects from its URLs. Kept apart from the site so Netlify builds don't install it.",
   "scripts": {
     "import": "node --experimental-strip-types import.ts",
-    "compare": "node --experimental-strip-types compare.ts"
+    "compare": "node --experimental-strip-types compare.ts",
+    "redirects": "node --experimental-strip-types redirects.ts"
   },
   "engines": {
     "node": ">=22.12.0"
