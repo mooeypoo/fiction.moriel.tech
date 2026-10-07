@@ -5,6 +5,7 @@
     "status": "publish",
     "slug": "the-forbidden-fruit",
     "link": "https://lit.smarterthanthat.com/prose/the-forbidden-fruit/",
+    "date": "2006-12-13 01:07:46",
     "categories": [
       "prose"
     ],
@@ -12,6 +13,11 @@
       "Critical Thinking",
       "Fiction",
       "Religion"
+    ],
+    "tagSlugs": [
+      "critical-thinking",
+      "fiction",
+      "religion"
     ]
   },
   {
@@ -20,12 +26,17 @@
     "status": "publish",
     "slug": "bootcamp",
     "link": "https://lit.smarterthanthat.com/prose/bootcamp/",
+    "date": "2011-02-22 01:28:07",
     "categories": [
       "prose"
     ],
     "tags": [
       "Military",
       "Personal"
+    ],
+    "tagSlugs": [
+      "military",
+      "personal"
     ]
   },
   {
@@ -34,12 +45,17 @@
     "status": "publish",
     "slug": "mr-heart-and-mrs-brain",
     "link": "https://lit.smarterthanthat.com/prose/mr-heart-and-mrs-brain/",
+    "date": "2011-02-06 01:31:17",
     "categories": [
       "prose"
     ],
     "tags": [
       "Fiction",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "fiction",
+      "symbolic"
     ]
   },
   {
@@ -48,10 +64,12 @@
     "status": "publish",
     "slug": "valentines-day-poem",
     "link": "https://lit.smarterthanthat.com/poem/valentines-day-poem/",
+    "date": "2011-02-12 01:33:06",
     "categories": [
       "poem"
     ],
-    "tags": []
+    "tags": [],
+    "tagSlugs": []
   },
   {
     "id": "16",
@@ -59,11 +77,15 @@
     "status": "publish",
     "slug": "snippets-of-wisdom",
     "link": "https://lit.smarterthanthat.com/prose/snippets-of-wisdom/",
+    "date": "2011-03-05 01:38:54",
     "categories": [
       "prose"
     ],
     "tags": [
       "Personal"
+    ],
+    "tagSlugs": [
+      "personal"
     ]
   },
   {
@@ -72,6 +94,7 @@
     "status": "publish",
     "slug": "one-million",
     "link": "https://lit.smarterthanthat.com/poem/one-million/",
+    "date": "2000-06-05 01:43:55",
     "categories": [
       "poem"
     ],
@@ -79,6 +102,11 @@
       "Critical Thinking",
       "Personal",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "critical-thinking",
+      "personal",
+      "symbolic"
     ]
   },
   {
@@ -87,8 +115,10 @@
     "status": "publish",
     "slug": "about-me",
     "link": "https://lit.smarterthanthat.com/about-me/",
+    "date": "2011-05-13 18:01:53",
     "categories": [],
-    "tags": []
+    "tags": [],
+    "tagSlugs": []
   },
   {
     "id": "23",
@@ -96,12 +126,17 @@
     "status": "publish",
     "slug": "god-says-no",
     "link": "https://lit.smarterthanthat.com/poem/god-says-no/",
+    "date": "2011-02-27 02:21:19",
     "categories": [
       "poem"
     ],
     "tags": [
       "Religion",
       "Weird"
+    ],
+    "tagSlugs": [
+      "religion",
+      "weird"
     ]
   },
   {
@@ -110,12 +145,17 @@
     "status": "draft",
     "slug": "lieutenant-civilian-and-military-police",
     "link": "https://lit.smarterthanthat.com/?p=30",
+    "date": "2011-11-24 05:07:42",
     "categories": [
       "prose"
     ],
     "tags": [
       "Military",
       "Personal"
+    ],
+    "tagSlugs": [
+      "military",
+      "personal"
     ]
   },
   {
@@ -124,8 +164,10 @@
     "status": "publish",
     "slug": "contact",
     "link": "https://lit.smarterthanthat.com/contact/",
+    "date": "2011-12-19 04:46:54",
     "categories": [],
-    "tags": []
+    "tags": [],
+    "tagSlugs": []
   },
   {
     "id": "5",
@@ -133,12 +175,17 @@
     "status": "publish",
     "slug": "the-summer-i-was-seventeen",
     "link": "https://lit.smarterthanthat.com/prose/the-summer-i-was-seventeen/",
+    "date": "2011-04-10 01:11:19",
     "categories": [
       "prose"
     ],
     "tags": [
       "Military",
       "Personal"
+    ],
+    "tagSlugs": [
+      "military",
+      "personal"
     ]
   },
   {
@@ -147,12 +194,17 @@
     "status": "publish",
     "slug": "heat",
     "link": "https://lit.smarterthanthat.com/prose/heat/",
+    "date": "2011-05-11 01:14:34",
     "categories": [
       "prose"
     ],
     "tags": [
       "Descriptive",
       "Personal"
+    ],
+    "tagSlugs": [
+      "descriptive",
+      "personal"
     ]
   },
   {
@@ -161,12 +213,17 @@
     "status": "publish",
     "slug": "massive-is-attractive",
     "link": "https://lit.smarterthanthat.com/prose/massive-is-attractive/",
+    "date": "2011-05-09 01:18:07",
     "categories": [
       "prose"
     ],
     "tags": [
       "Descriptive",
       "Fiction"
+    ],
+    "tagSlugs": [
+      "descriptive",
+      "fiction"
     ]
   },
   {
@@ -175,12 +232,17 @@
     "status": "publish",
     "slug": "physics-of-the-tooth-fairy",
     "link": "https://lit.smarterthanthat.com/prose/physics-of-the-tooth-fairy/",
+    "date": "2011-04-13 01:23:02",
     "categories": [
       "prose"
     ],
     "tags": [
       "Critical Thinking",
       "Personal"
+    ],
+    "tagSlugs": [
+      "critical-thinking",
+      "personal"
     ]
   },
   {
@@ -189,12 +251,17 @@
     "status": "publish",
     "slug": "i-noticed",
     "link": "https://lit.smarterthanthat.com/prose/i-noticed/",
+    "date": "2011-04-10 02:15:32",
     "categories": [
       "prose"
     ],
     "tags": [
       "Personal",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "personal",
+      "symbolic"
     ]
   },
   {
@@ -203,12 +270,17 @@
     "status": "publish",
     "slug": "slow-down-time",
     "link": "https://lit.smarterthanthat.com/prose/slow-down-time/",
+    "date": "2011-03-16 02:30:45",
     "categories": [
       "prose"
     ],
     "tags": [
       "Personal",
       "Weird"
+    ],
+    "tagSlugs": [
+      "personal",
+      "weird"
     ]
   },
   {
@@ -217,12 +289,17 @@
     "status": "publish",
     "slug": "headless",
     "link": "https://lit.smarterthanthat.com/prose/headless/",
+    "date": "2011-05-14 02:11:26",
     "categories": [
       "prose"
     ],
     "tags": [
       "Fiction",
       "Weird"
+    ],
+    "tagSlugs": [
+      "fiction",
+      "weird"
     ]
   },
   {
@@ -231,6 +308,7 @@
     "status": "publish",
     "slug": "ultimate-betrayal",
     "link": "https://lit.smarterthanthat.com/prose/ultimate-betrayal/",
+    "date": "2011-11-24 05:13:13",
     "categories": [
       "prose"
     ],
@@ -239,6 +317,12 @@
       "Descriptive",
       "Fiction",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "critical-thinking",
+      "descriptive",
+      "fiction",
+      "symbolic"
     ]
   },
   {
@@ -247,6 +331,7 @@
     "status": "publish",
     "slug": "telemarketing-call-from-hell",
     "link": "https://lit.smarterthanthat.com/prose/telemarketing-call-from-hell/",
+    "date": "2013-11-10 15:07:13",
     "categories": [
       "prose",
       "short-story"
@@ -257,6 +342,13 @@
       "Religion",
       "sarcasm",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "descriptive",
+      "fiction",
+      "religion",
+      "sarcasm",
+      "symbolic"
     ]
   },
   {
@@ -265,10 +357,12 @@
     "status": "publish",
     "slug": "injured-stories",
     "link": "https://lit.smarterthanthat.com/poem/injured-stories/",
+    "date": "2015-10-25 14:29:40",
     "categories": [
       "poem"
     ],
-    "tags": []
+    "tags": [],
+    "tagSlugs": []
   },
   {
     "id": "58",
@@ -276,6 +370,7 @@
     "status": "publish",
     "slug": "fleeting-concentration",
     "link": "https://lit.smarterthanthat.com/prose/fleeting-concentration/",
+    "date": "2015-10-25 14:32:17",
     "categories": [
       "flash-fiction",
       "prose"
@@ -283,6 +378,11 @@
     "tags": [
       "Descriptive",
       "Fiction",
+      "sarcasm"
+    ],
+    "tagSlugs": [
+      "descriptive",
+      "fiction",
       "sarcasm"
     ]
   },
@@ -292,11 +392,15 @@
     "status": "publish",
     "slug": "an-ode-to-an-ordinary-thing",
     "link": "https://lit.smarterthanthat.com/poem/an-ode-to-an-ordinary-thing/",
+    "date": "2015-10-25 14:36:52",
     "categories": [
       "poem"
     ],
     "tags": [
       "Weird"
+    ],
+    "tagSlugs": [
+      "weird"
     ]
   },
   {
@@ -305,6 +409,7 @@
     "status": "publish",
     "slug": "the-box",
     "link": "https://lit.smarterthanthat.com/prose/the-box/",
+    "date": "2015-10-25 14:43:52",
     "categories": [
       "flash-fiction",
       "prose"
@@ -312,6 +417,10 @@
     "tags": [
       "Descriptive",
       "Symbolic"
+    ],
+    "tagSlugs": [
+      "descriptive",
+      "symbolic"
     ]
   },
   {
@@ -320,6 +429,7 @@
     "status": "publish",
     "slug": "a-message-from-space",
     "link": "https://lit.smarterthanthat.com/prose/a-message-from-space/",
+    "date": "2015-10-25 14:46:42",
     "categories": [
       "flash-fiction",
       "prose"
@@ -328,6 +438,11 @@
       "Critical Thinking",
       "sarcasm",
       "Weird"
+    ],
+    "tagSlugs": [
+      "critical-thinking",
+      "sarcasm",
+      "weird"
     ]
   }
 ]

@@ -254,13 +254,13 @@ if (!exportPath) throw new Error('Usage: npm run import -- <export.xml>')
 
 const turndown = createTurndown()
 const items = readWxr(exportPath)
-const urls: { id: string; type: string; status: string; slug: string; link: string; categories: string[]; tags: string[] }[] = []
+const urls: { id: string; type: string; status: string; slug: string; link: string; date: string; categories: string[]; tags: string[]; tagSlugs: string[] }[] = []
 mkdirSync(PIECES_DIR, { recursive: true })
 mkdirSync(PAGES_DIR, { recursive: true })
 
 for (const item of items) {
   if (item.type !== 'post' && item.type !== 'page') continue
-  urls.push({ id: item.id, type: item.type, status: item.status, slug: item.slug, link: item.link, categories: item.categories, tags: item.tags })
+  urls.push({ id: item.id, type: item.type, status: item.status, slug: item.slug, link: item.link, date: item.localDate, categories: item.categories, tags: item.tags, tagSlugs: item.tagSlugs })
 
   if (item.type === 'page' && item.slug !== 'about-me') {
     report.skipped.push({ slug: item.slug, title: item.title, reason: 'page replaced by a link to https://moriel.tech/contact' })

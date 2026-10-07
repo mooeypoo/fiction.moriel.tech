@@ -17,6 +17,8 @@ export interface WxrItem {
   categories: string[]
   /** Display names. */
   tags: string[]
+  /** WordPress's URL slugs for the tags, in the same order. */
+  tagSlugs: string[]
 }
 
 export function readWxr(path: string) {
@@ -41,6 +43,7 @@ export function readWxr(path: string) {
       content: text(item, 'content:encoded'),
       categories: terms('category').map((term) => term.getAttribute('nicename') ?? ''),
       tags: terms('post_tag').map((term) => term.textContent ?? ''),
+      tagSlugs: terms('post_tag').map((term) => term.getAttribute('nicename') ?? ''),
     }
   })
 }
