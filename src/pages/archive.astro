@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Contents from '../components/Contents.astro'
+import { getListedPieces, groupByYear } from '../lib/content'
+
+const pieces = await getListedPieces()
+const years = groupByYear(pieces)
+---
+
+<BaseLayout title="Archive" description={`All ${pieces.length} pieces, by year.`} card="archive">
+  <header class="page-header">
+    <h1>Archive</h1>
+    <p>All {pieces.length} pieces, newest first.</p>
+  </header>
+  <div class="years">
+    {years.map(([year, inYear]) => (
+      <section class="year" aria-labelledby={`year-${year}`}>
+        <h2 id={`year-${year}`}>{year}</h2>
+        <Contents pieces={inYear} date="full" showType />
+      </section>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-header p {
+    color: var(--muted);
+  }
+
+  .years {
+    max-width: 46rem;
+  }
+
+  .year {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 0 2rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  h2 {
+    margin: 0.2rem 0 0;
+    color: var(--accent);
+    font-weight: 400;
+    font-variant-numeric: oldstyle-nums;
+  }
+
+  @media (max-width: 560px) {
+    .year {
+      grid-template-columns: 1fr;
+    }
+
+    h2 {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>

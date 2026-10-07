@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Contents from '../components/Contents.astro'
+import PlaneMark from '../components/PlaneMark.astro'
+import { getListedPieces } from '../lib/content'
+import { formatDate, getPiecePath, getTypeInfo, TYPES } from '../lib/pieces'
+import { SITE_EPIGRAPH, SITE_SUBTITLE } from '../lib/site'
+
+const pieces = await getListedPieces()
+const [latest] = pieces
+// Each type's newest few; the type page has them all.
+const PER_TYPE = 6
+const sections = TYPES.map((info) => ({ info, all: pieces.filter((piece) => piece.data.type === info.type) }))
+---
+
+<BaseLayout>
+  <section class="masthead">
+    <PlaneMark size={88} class="masthead-mark" />
+    <div>
+      <h1><em>Imaginary</em> Parts</h1>
+      <p class="subtitle">{SITE_SUBTITLE}</p>
+      <p class="epigraph">{SITE_EPIGRAPH}</p>
+    </div>
+  </section>
+
+  {latest && (
+    <section class="latest" aria-labelledby="latest-heading">
+      <p class="label" id="latest-heading">Latest</p>
+      <p class="label label-accent">{getTypeInfo(latest.data.type).label} · {formatDate(latest.data.date)}</p>
+      <h2><a href={getPiecePath(latest.id)}>{latest.data.title}</a></h2>
+      <p class:list={['latest-excerpt', { 'latest-poem': latest.data.type === 'poem' }]}>{latest.data.excerpt}</p>
+      <a class="read-link" href={getPiecePath(latest.id)}>Read<span class="sr-only"> {latest.data.title}</span> →</a>
+    </section>
+  )}
+
+  <section class="contents-section" aria-labelledby="contents-heading">
+    <h2 id="contents-heading" class="contents-heading">Contents</h2>
+    <div class="contents-columns">
+      {sections.map(({ info, all }) => (
+        <section class="contents-type" aria-labelledby={`contents-${info.type}`}>
+          <h3 id={`contents-${info.type}`}>
+            <a href={info.path}>{info.plural}</a>
+            <span class="count">{all.length}</span>
+          </h3>
+          <Contents pieces={all.slice(0, PER_TYPE)} />
+          {all.length > PER_TYPE && <a class="more" href={info.path}>All {all.length} {info.plural.toLowerCase()} →</a>}
+        </section>
+      ))}
+    </div>
+    <p class="archive-link"><a href="/archive">The full archive, by year →</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+    margin-bottom: clamp(2.5rem, 7vw, 4.5rem);
+  }
+
+  .masthead :global(.masthead-mark) {
+    color: var(--muted);
+  }
+
+  @media (max-width: 560px) {
+    .masthead :global(.masthead-mark) {
+      display: none;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.6rem, 9vw, 5rem);
+    line-height: 1;
+  }
+
+  h1 em {
+    font-weight: 400;
+  }
+
+  .subtitle {
+    margin: 0.75rem 0 0;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  }
+
+  .epigraph {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .latest {
+    max-width: 44rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--surface);
+  }
+
+  .latest .label {
+    margin: 0 0 0.35rem;
+  }
+
+  .latest h2 {
+    margin: 0.25rem 0 0.75rem;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+
+  .latest h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .latest h2 a:hover {
+    color: var(--accent);
+  }
+
+  .latest-excerpt {
+    max-width: var(--measure);
+    font-size: 1.15rem;
+  }
+
+  .latest-poem {
+    font-style: italic;
+  }
+
+  .read-link {
+    font-weight: 600;
+  }
+
+  .contents-section {
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+
+  .contents-heading {
+    margin: 0 0 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .contents-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 2.5rem 3rem;
+  }
+
+  h3 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0 0 0.75rem;
+    font-size: 1.35rem;
+  }
+
+  h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  h3 a:hover {
+    color: var(--accent);
+  }
+
+  .count {
+    font-family: var(--body);
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .more {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .archive-link {
+    margin-top: 2.5rem;
+  }
+</style>

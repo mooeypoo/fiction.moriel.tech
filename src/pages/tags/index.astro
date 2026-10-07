@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getListedPieces, getTags } from '../../lib/content'
+import { getTagPath } from '../../lib/pieces'
+
+const tags = getTags(await getListedPieces())
+---
+
+<BaseLayout title="Tags" description="Themes that run across stories, flash fiction, and poems." card="tags">
+  <header class="page-header">
+    <h1>Tags</h1>
+    <p>Themes that run across stories, flash fiction, and poems.</p>
+  </header>
+  <ul class="tag-cloud">
+    {tags.map(({ tag, count }) => (
+      <li>
+        <a href={getTagPath(tag)}>{tag} <span class="count">{count}</span></a>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
+
+<style>
+  .page-header p {
+    color: var(--muted);
+  }
+
+  .tag-cloud {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    max-width: 46rem;
+  }
+
+  .tag-cloud a {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--text);
+    font-family: var(--display);
+    font-size: 1.15rem;
+    text-decoration: none;
+  }
+
+  .tag-cloud a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .count {
+    margin-left: 0.3rem;
+    font-family: var(--body);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>

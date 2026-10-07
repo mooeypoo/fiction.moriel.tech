@@ -1,0 +1,43 @@
+---
+// Standalone pages from src/content/pages: about.md → /about.
+import { render } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getBuiltPages } from '../lib/content'
+import { isIndexable } from '../lib/visibility'
+
+export async function getStaticPaths() {
+  return (await getBuiltPages()).map((page) => ({ params: { page: page.id }, props: { page } }))
+}
+
+const { page } = Astro.props
+const { Content } = await render(page)
+---
+
+<BaseLayout title={page.data.title} description={page.data.description} noindex={!isIndexable(page.data)}>
+  <article class="page">
+    <h1>{page.data.title}</h1>
+    {page.data.note && <p class="page-note" role="note">{page.data.note}</p>}
+    <div class="page-content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: var(--measure);
+    margin: 0 auto;
+  }
+
+  .page-note {
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .page-content {
+    font-size: 1.15rem;
+  }
+</style>
