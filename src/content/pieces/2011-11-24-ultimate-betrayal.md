@@ -32,5 +32,3 @@ So he was told.
 * * *
 
 “*Go to heaven for the climate, Hell for the company.*” -- Mark Twain
-
-Image Credit: [Navdeep Raj](http://www.flickr.com/photos/navdeepraj/504548372/) via Flickr

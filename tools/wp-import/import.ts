@@ -116,7 +116,7 @@ function cleanHtml(slug: string, input: string) {
 
   // Credits for images that are gone.
   for (const p of [...body.querySelectorAll('p')]) {
-    if (/^\s*Photo Credit:/i.test(p.textContent ?? '')) {
+    if (/^\s*(Photo|Image) Credit:/i.test(p.textContent ?? '')) {
       report.removed.push({ slug, what: `image credit: "${p.textContent!.trim()}"` })
       p.remove()
     }
