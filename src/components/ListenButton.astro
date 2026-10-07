@@ -1,0 +1,69 @@
+---
+// The Listen entry point beside the piece's date: present, but no louder than the reading time.
+// ListenPlayer.astro wires it up and shows it once a voice or audio is ready. From blog.moriel.tech.
+import { getListeningMinutes } from '../lib/speech'
+
+interface Props {
+  words: number
+}
+
+const { words } = Astro.props
+---
+
+<button type="button" class="listen-pill" data-listen-pill hidden>
+  <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+  <span data-listen-pill-label>Listen</span>
+  <span class="listen-pill-duration" data-listen-duration>~{getListeningMinutes(words, 1)} min</span>
+</button>
+
+<style>
+  .listen-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.75rem 0.2rem 0.55rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    border-radius: 999px;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .listen-pill[hidden] {
+    display: none;
+  }
+
+  .listen-pill:hover {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .listen-pill:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .listen-pill svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  .listen-pill-duration {
+    opacity: 0.75;
+  }
+
+  .listen-pill .icon-pause,
+  .listen-pill.is-playing .icon-play,
+  .listen-pill.is-active .listen-pill-duration {
+    display: none;
+  }
+
+  .listen-pill.is-playing .icon-pause {
+    display: block;
+  }
+</style>

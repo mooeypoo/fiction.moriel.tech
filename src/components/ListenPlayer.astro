@@ -1,0 +1,661 @@
+---
+// Reads the piece aloud, exactly as blog.moriel.tech does. Plays the generated audio when it matches the
+// page's text, and falls back to the browser's speech otherwise (docs/AUDIO.md). The header's
+// ListenButton starts it; this bar holds the controls and is shown only while listening.
+
+interface Props {
+  slug: string
+  words: number
+}
+
+const { slug, words } = Astro.props
+---
+
+<section class="listen-bar" data-listen data-slug={slug} data-words={words} aria-label="Listen to this piece" hidden>
+  <button type="button" class="listen-play" data-listen-play aria-label="Pause">
+    <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+  </button>
+
+  <div class="listen-main">
+    <div class="listen-progress" role="progressbar" aria-label="Listening progress" aria-valuemin="0" data-listen-progress>
+      <div class="listen-progress-fill" data-listen-fill></div>
+    </div>
+    <p class="listen-status" data-listen-status></p>
+  </div>
+
+  <div class="listen-controls">
+    <button type="button" class="listen-icon-button" data-listen-prev aria-label="Previous paragraph">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z" /></svg>
+    </button>
+    <button type="button" class="listen-icon-button" data-listen-next aria-label="Next paragraph">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l11-7z" /></svg>
+    </button>
+    <label class="listen-setting">
+      <span class="sr-only">Speed</span>
+      <select data-listen-rate>
+        <option value="0.75">0.75×</option>
+        <option value="0.9">0.9×</option>
+        <option value="1" selected>1×</option>
+        <option value="1.15">1.15×</option>
+        <option value="1.25">1.25×</option>
+        <option value="1.5">1.5×</option>
+      </select>
+    </label>
+    <label class="listen-setting listen-voice">
+      <span class="sr-only">Voice</span>
+      <select data-listen-voice></select>
+    </label>
+    <button type="button" class="listen-icon-button" data-listen-stop aria-label="Stop">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z" /></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  import { getListeningMinutes, rankVoices } from '../lib/speech'
+  import { AUDIO_BASE_URL, getSpokenBlocks, hashSpokenText, type AudioManifest, type AudioManifestEntry } from '../lib/listen-text'
+
+  type State = 'idle' | 'playing' | 'paused'
+
+  interface Events {
+    onIndex: (index: number) => void
+    onEnd: () => void
+  }
+
+  /** What the player drives: generated audio or the browser's speech. */
+  interface Source {
+    readonly length: number
+    rate: number
+    /** Start reading at a block. */
+    play(index: number): void
+    /** Continue after a pause. */
+    resume(): void
+    pause(): void
+    stop(): void
+  }
+
+  const RATE_KEY = 'listen-rate'
+  const VOICE_KEY = 'listen-voice'
+  const SEEK_STEP = 10
+
+  const storage = {
+    get: (key: string) => {
+      try {
+        return localStorage.getItem(key)
+      } catch {
+        return null
+      }
+    },
+    set: (key: string, value: string) => {
+      try {
+        localStorage.setItem(key, value)
+      } catch {}
+    },
+  }
+
+  const formatTime = (seconds: number) =>
+    `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`
+
+  /**
+   * Whole paragraphs keep the voice's natural rhythm. Desktop Chrome stops long utterances
+   * after ~15 s, which a periodic pause/resume prevents; elsewhere that would cause stutters.
+   */
+  class SpeechSource implements Source {
+    rate = 1
+    voice: SpeechSynthesisVoice | undefined
+    private index = 0
+    // Cancelling fires `end` on the old utterance in some browsers; only the newest may advance.
+    private generation = 0
+    private keepAlive: number | undefined
+    private readonly needsKeepAlive = /Chrome\//.test(navigator.userAgent) && !/Android|Mobile/.test(navigator.userAgent)
+
+    constructor(
+      private readonly texts: string[],
+      private readonly events: Events,
+    ) {}
+
+    get length() {
+      return this.texts.length
+    }
+
+    play(index: number) {
+      const synth = window.speechSynthesis
+      const current = ++this.generation
+      synth.cancel()
+      this.clearKeepAlive()
+      if (index >= this.texts.length) return this.events.onEnd()
+
+      this.index = index
+      const utterance = new SpeechSynthesisUtterance(this.texts[index])
+      utterance.lang = document.documentElement.lang || 'en'
+      utterance.rate = this.rate
+      if (this.voice) utterance.voice = this.voice
+      utterance.onend = () => {
+        if (current === this.generation) this.play(index + 1)
+      }
+      utterance.onerror = (event) => {
+        if (current === this.generation && event.error !== 'interrupted' && event.error !== 'canceled') this.events.onEnd()
+      }
+      this.events.onIndex(index)
+      synth.speak(utterance)
+
+      if (this.needsKeepAlive) {
+        this.keepAlive = window.setInterval(() => {
+          if (synth.speaking && !synth.paused) {
+            synth.pause()
+            synth.resume()
+          }
+        }, 10000)
+      }
+    }
+
+    // Native pause/resume is unreliable on Android, so resuming restarts the paragraph.
+    resume() {
+      this.play(this.index)
+    }
+
+    pause() {
+      this.stop()
+    }
+
+    stop() {
+      this.generation++
+      this.clearKeepAlive()
+      window.speechSynthesis.cancel()
+    }
+
+    private clearKeepAlive() {
+      window.clearInterval(this.keepAlive)
+      this.keepAlive = undefined
+    }
+  }
+
+  /** The generated recording; `starts` maps each spoken block to its time in the file. */
+  class AudioSource implements Source {
+    readonly audio = new Audio()
+    private index = -1
+
+    constructor(
+      readonly entry: AudioManifestEntry,
+      private readonly events: Events & { onTime: () => void; onError: () => void },
+    ) {
+      this.audio.preload = 'none'
+      this.audio.src = new URL(entry.file, AUDIO_BASE_URL).href
+      this.audio.addEventListener('timeupdate', () => {
+        const index = this.indexAt(this.audio.currentTime)
+        if (index !== this.index) {
+          this.index = index
+          events.onIndex(index)
+        }
+        events.onTime()
+      })
+      this.audio.addEventListener('ended', () => events.onEnd())
+      this.audio.addEventListener('error', () => events.onError())
+    }
+
+    get length() {
+      return this.entry.starts.length
+    }
+
+    get rate() {
+      return this.audio.playbackRate
+    }
+
+    set rate(rate: number) {
+      this.audio.playbackRate = rate
+    }
+
+    indexAt(time: number) {
+      let index = 0
+      while (index + 1 < this.entry.starts.length && this.entry.starts[index + 1] <= time + 0.05) index++
+      return index
+    }
+
+    play(index: number) {
+      this.seek(this.entry.starts[index] ?? 0)
+      this.resume()
+    }
+
+    seek(time: number) {
+      this.audio.currentTime = Math.min(Math.max(time, 0), this.entry.duration)
+    }
+
+    resume() {
+      this.audio.play().catch(() => this.events.onError())
+    }
+
+    pause() {
+      this.audio.pause()
+    }
+
+    stop() {
+      this.audio.pause()
+      this.audio.currentTime = 0
+      this.index = -1
+    }
+  }
+
+  async function findAudio(slug: string, texts: string[]) {
+    try {
+      const response = await fetch(new URL('manifest.json', AUDIO_BASE_URL))
+      if (!response.ok) return undefined
+      const entry = ((await response.json()) as AudioManifest).posts[slug]
+      return entry && entry.hash === (await hashSpokenText(texts)) ? entry : undefined
+    } catch {
+      return undefined
+    }
+  }
+
+  function setUp() {
+    const bar = document.querySelector<HTMLElement>('[data-listen]')
+    const pill = document.querySelector<HTMLButtonElement>('[data-listen-pill]')
+    if (!bar || !pill) return
+    const blocks = getSpokenBlocks(document)
+    if (blocks.length === 0) return
+
+    const query = <T extends Element>(selector: string) => document.querySelector<T>(selector)!
+    const playButton = query<HTMLButtonElement>('[data-listen-play]')
+    const stopButton = query<HTMLButtonElement>('[data-listen-stop]')
+    const prevButton = query<HTMLButtonElement>('[data-listen-prev]')
+    const nextButton = query<HTMLButtonElement>('[data-listen-next]')
+    const rateSelect = query<HTMLSelectElement>('[data-listen-rate]')
+    const voiceSelect = query<HTMLSelectElement>('[data-listen-voice]')
+    const voiceSetting = query<HTMLElement>('.listen-voice')
+    const pillLabel = query<HTMLElement>('[data-listen-pill-label]')
+    const progress = query<HTMLElement>('[data-listen-progress]')
+    const fill = query<HTMLElement>('[data-listen-fill]')
+    const status = query<HTMLElement>('[data-listen-status]')
+    const duration = query<HTMLElement>('[data-listen-duration]')
+    const words = Number(bar.dataset.words)
+    const texts = blocks.map((block) => block.text)
+
+    let state: State = 'idle'
+    let index = 0
+    let highlighted: Element | undefined
+
+    const events: Events = {
+      onIndex: (current) => {
+        index = current
+        highlight(blocks[current]?.element)
+        render()
+      },
+      onEnd: () => stop(),
+    }
+
+    const speech = 'speechSynthesis' in window ? new SpeechSource(texts, events) : undefined
+    let audio: AudioSource | undefined
+    let source: Source | undefined = speech
+
+    function highlight(element: Element | undefined) {
+      highlighted?.classList.remove('is-being-read')
+      highlighted = element
+      if (!element) return
+      element.classList.add('is-being-read')
+      const { top, bottom } = element.getBoundingClientRect()
+      if (top < 0 || bottom > window.innerHeight - bar.offsetHeight) element.scrollIntoView({ block: 'center' })
+    }
+
+    function render() {
+      if (!source) return
+      const active = state !== 'idle'
+      const rate = source.rate
+      const action = state === 'playing' ? 'Pause' : 'Resume'
+      bar.hidden = !active
+      document.body.classList.toggle('is-listening', active)
+      for (const button of [playButton, pill]) button.classList.toggle('is-playing', state === 'playing')
+      pill.classList.toggle('is-active', active)
+      playButton.setAttribute('aria-label', action)
+      pillLabel.textContent = active ? action : 'Listen'
+      voiceSetting.hidden = source !== speech || voiceSelect.options.length < 2
+
+      if (source === audio) {
+        const { currentTime } = audio.audio
+        const total = audio.entry.duration
+        duration.textContent = `~${Math.max(1, Math.round(total / 60 / rate))} min`
+        fill.style.width = active ? `${(currentTime / total) * 100}%` : '0%'
+        status.textContent = active ? `${formatTime(currentTime)} / ${formatTime(total)}` : ''
+        progress.setAttribute('role', 'slider')
+        progress.tabIndex = 0
+        progress.setAttribute('aria-valuemax', String(Math.round(total)))
+        progress.setAttribute('aria-valuenow', String(Math.round(currentTime)))
+        progress.setAttribute('aria-valuetext', status.textContent)
+      } else {
+        progress.setAttribute('role', 'progressbar')
+        progress.removeAttribute('tabindex')
+        progress.removeAttribute('aria-valuetext')
+        duration.textContent = `~${getListeningMinutes(words, rate)} min`
+        fill.style.width = active ? `${((index + 1) / source.length) * 100}%` : '0%'
+        status.textContent = active ? `Paragraph ${index + 1} of ${source.length}` : ''
+        progress.setAttribute('aria-valuemax', String(source.length))
+        progress.setAttribute('aria-valuenow', String(active ? index + 1 : 0))
+      }
+      if ('mediaSession' in navigator && source === audio) {
+        navigator.mediaSession.playbackState = state === 'playing' ? 'playing' : state === 'paused' ? 'paused' : 'none'
+      }
+    }
+
+    function play(from = index) {
+      if (!source) return
+      if (state === 'paused' && from === index) source.resume()
+      else source.play(from)
+      state = 'playing'
+      render()
+    }
+
+    function pause() {
+      state = 'paused'
+      source?.pause()
+      render()
+    }
+
+    function stop() {
+      state = 'idle'
+      index = 0
+      source?.stop()
+      highlight(undefined)
+      render()
+    }
+
+    function jump(offset: number) {
+      if (!source) return
+      const target = Math.min(Math.max(index + offset, 0), source.length - 1)
+      if (state === 'playing') return play(target)
+      index = target
+      highlight(blocks[target].element)
+      if (source === audio) audio.seek(audio.entry.starts[target])
+      if (state === 'idle') state = 'paused'
+      render()
+    }
+
+    function seekBy(seconds: number) {
+      if (source !== audio) return
+      audio.seek(audio.audio.currentTime + seconds)
+      render()
+    }
+
+    function useAudio(entry: AudioManifestEntry) {
+      audio = new AudioSource(entry, {
+        ...events,
+        onTime: render,
+        // Unreachable or broken audio: keep listening with the browser voice.
+        onError: () => {
+          const resumeAt = index
+          const wasPlaying = state === 'playing'
+          audio?.pause()
+          source = speech
+          if (!speech) return stop()
+          speech.rate = Number(rateSelect.value)
+          if (wasPlaying) speech.play(resumeAt)
+          render()
+        },
+      })
+      audio.rate = Number(rateSelect.value)
+      source = audio
+      setUpMediaSession()
+      pill.hidden = false
+      render()
+    }
+
+    function setUpMediaSession() {
+      if (!('mediaSession' in navigator)) return
+      // Same-origin path: the absolute og:image URL points at production, which the CSP blocks elsewhere.
+      const ogImage = document.querySelector<HTMLMetaElement>('meta[property="og:image"]')?.content
+      const artwork = ogImage && new URL(ogImage).pathname
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: blocks[0].element.textContent?.trim() ?? document.title,
+        artist: 'Imaginary Parts',
+        artwork: artwork ? [{ src: artwork }] : [],
+      })
+      const handlers: [MediaSessionAction, MediaSessionActionHandler][] = [
+        ['play', () => play()],
+        ['pause', () => pause()],
+        ['stop', () => stop()],
+        ['previoustrack', () => jump(-1)],
+        ['nexttrack', () => jump(1)],
+        ['seekbackward', () => seekBy(-SEEK_STEP)],
+        ['seekforward', () => seekBy(SEEK_STEP)],
+        ['seekto', (details) => {
+          if (details.seekTime !== undefined) audio?.seek(details.seekTime)
+        }],
+      ]
+      for (const [action, handler] of handlers) {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler)
+        } catch {}
+      }
+    }
+
+    // Settings apply from the start of the current paragraph for speech; audio changes instantly.
+    function applyRate() {
+      if (!source) return
+      source.rate = Number(rateSelect.value)
+      storage.set(RATE_KEY, rateSelect.value)
+      if (source === speech && state === 'playing') play(index)
+      else render()
+    }
+
+    function populateVoices() {
+      if (!speech) return
+      const voices = rankVoices(window.speechSynthesis.getVoices(), document.documentElement.lang || 'en')
+      if (voices.length === 0) return
+      const saved = storage.get(VOICE_KEY)
+      voiceSelect.replaceChildren(
+        ...voices.map((voice) => new Option(voice.name, voice.voiceURI, false, voice.voiceURI === saved)),
+      )
+      speech.voice = voices.find((voice) => voice.voiceURI === voiceSelect.value) ?? voices[0]
+      pill.hidden = false
+      render()
+    }
+
+    const savedRate = storage.get(RATE_KEY)
+    if (savedRate && [...rateSelect.options].some((option) => option.value === savedRate)) rateSelect.value = savedRate
+    if (speech) speech.rate = Number(rateSelect.value)
+
+    for (const button of [playButton, pill]) button.addEventListener('click', () => (state === 'playing' ? pause() : play()))
+    // The bar disappears on stop, so focus returns to where listening started.
+    stopButton.addEventListener('click', () => {
+      stop()
+      pill.focus()
+    })
+    prevButton.addEventListener('click', () => jump(-1))
+    nextButton.addEventListener('click', () => jump(1))
+    rateSelect.addEventListener('change', applyRate)
+    voiceSelect.addEventListener('change', () => {
+      if (!speech) return
+      speech.voice = window.speechSynthesis.getVoices().find((voice) => voice.voiceURI === voiceSelect.value)
+      storage.set(VOICE_KEY, voiceSelect.value)
+      if (source === speech && state === 'playing') play(index)
+    })
+    progress.addEventListener('click', (event) => {
+      if (source !== audio) return
+      const { left, width } = progress.getBoundingClientRect()
+      audio.seek(((event.clientX - left) / width) * audio.entry.duration)
+      render()
+    })
+    progress.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault()
+        seekBy(event.key === 'ArrowRight' ? SEEK_STEP : -SEEK_STEP)
+      }
+    })
+    window.addEventListener('pagehide', stop)
+
+    if (speech) {
+      populateVoices()
+      window.speechSynthesis.addEventListener('voiceschanged', populateVoices)
+    }
+    findAudio(bar.dataset.slug!, texts).then((entry) => {
+      // Don't swap sources under someone already listening with the browser voice.
+      if (entry && state === 'idle') useAudio(entry)
+    })
+  }
+
+  setUp()
+</script>
+
+<style>
+  .listen-bar {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    width: min(640px, calc(100% - 2rem));
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    transform: translateX(-50%);
+  }
+
+  .listen-bar[hidden],
+  .listen-setting[hidden] {
+    display: none;
+  }
+
+  /* Keeps the end of the page reachable above the bar. */
+  :global(body.is-listening) {
+    padding-bottom: 5rem;
+  }
+
+  .listen-play {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    cursor: pointer;
+  }
+
+  .listen-play svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+  }
+
+  .listen-play .icon-pause,
+  .listen-play.is-playing .icon-play {
+    display: none;
+  }
+
+  .listen-play.is-playing .icon-pause {
+    display: block;
+  }
+
+  .listen-main {
+    flex: 1;
+    min-width: 6rem;
+  }
+
+  .listen-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--rule);
+    overflow: hidden;
+  }
+
+  /* With generated audio the bar seeks: click, or arrow keys when focused. */
+  .listen-progress[role='slider'] {
+    height: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .listen-progress:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .listen-progress-fill {
+    width: 0;
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .listen-status {
+    min-height: 1.2em;
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  .listen-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .listen-icon-button {
+    display: grid;
+    place-items: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .listen-icon-button svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+
+  .listen-setting {
+    display: flex;
+    font-size: 0.85rem;
+  }
+
+  .listen-setting select {
+    max-width: 9rem;
+    height: 2.25rem;
+    padding: 0 0.4rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--bg);
+    color: inherit;
+    font: inherit;
+  }
+
+  .listen-play:focus-visible,
+  .listen-icon-button:focus-visible,
+  .listen-setting select:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .listen-voice {
+      display: none;
+    }
+  }
+
+  /* Too narrow for one row: progress on top, every button on the row below. */
+  @media (max-width: 480px) {
+    .listen-main {
+      flex-basis: 100%;
+      order: -1;
+    }
+
+    .listen-status {
+      display: none;
+    }
+
+    .listen-controls {
+      flex: 1;
+      justify-content: space-between;
+    }
+  }
+</style>
