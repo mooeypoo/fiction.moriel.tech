@@ -11,6 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "node --experimental-strip-types --test 'tests/unit/*.test.ts'",
+    "test:site": "node --experimental-strip-types --test 'tests/site/*.test.ts'",
     "audio:install": "npm ci --prefix tools/listen-audio",
     "audio": "npm --prefix tools/listen-audio run generate --"
   },

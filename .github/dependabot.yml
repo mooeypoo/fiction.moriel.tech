@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # Skip releases younger than a week, so a compromised or broken publish is
+    # usually caught upstream first. Security updates are not delayed.
+    cooldown:
+      default-days: 7
+    groups:
+      astro:
+        patterns:
+          - astro
+          - "@astrojs/*"
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

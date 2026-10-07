@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Pinned to commit SHAs so a moved tag can't change what runs; Dependabot updates them.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/listen-audio/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Unit tests
+        run: npm test
+      - name: Build the site
+        run: npm run build
+      # Checks the built pages: links, unlisted pages, poem line breaks (tests/site).
+      - name: Site tests
+        run: npm run test:site
+      # Heads-up in the check summary: which pieces' audio the Listen audio workflow will
+      # generate after merge (docs/AUDIO.md). Plans only; nothing is generated here.
+      - name: Plan Listen audio
+        if: github.event_name == 'pull_request'
+        run: |
+          npm run audio:install
+          npm run audio -- --plan --from https://mooeypoo.github.io/fiction.moriel.tech/
