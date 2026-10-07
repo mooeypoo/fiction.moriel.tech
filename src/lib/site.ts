@@ -1,8 +1,8 @@
 export const SITE_URL = 'https://fiction.moriel.tech'
 export const SITE_TITLE = 'Imaginary Parts'
 export const SITE_SUBTITLE = 'Stories, flash fiction, and the occasional poem'
-// The old site's tagline, kept as the home page epigraph.
-export const SITE_EPIGRAPH = 'The literary moosings of a creative physicist.'
+// Adapted from the old site's tagline; the home page epigraph.
+export const SITE_EPIGRAPH = 'The literary musings of a creative physicist.'
 export const SITE_DESCRIPTION = `${SITE_SUBTITLE}, by Moriel Schottlender.`
 export const AUTHOR = 'Moriel Schottlender'
 export const CONTACT_URL = 'https://moriel.tech/contact'
