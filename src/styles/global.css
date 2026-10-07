@@ -189,6 +189,11 @@ small {
 }
 
 /* External links open a new tab; the icon says so (a mask, so it follows the link color). */
+a.external-link {
+  /* Keeps the icon on the same line as the link's last word. Link texts here are short. */
+  white-space: nowrap;
+}
+
 a.external-link::after {
   content: '';
   display: inline-block;
