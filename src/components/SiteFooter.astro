@@ -20,9 +20,7 @@ const year = new Date().getFullYear()
       <ul>
         {ELSEWHERE.map((link) => (
           <li>
-            <a href={link.href} target="_blank" rel="noopener noreferrer" class="external-link">
-              {link.label}<span class="sr-only"> (opens in a new tab)</span>
-            </a>
+            <a href={link.href} target="_blank" rel="noopener noreferrer" class="external-link">{link.label}<span class="sr-only"> (opens in a new tab)</span></a>
           </li>
         ))}
       </ul>
