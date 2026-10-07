@@ -1,0 +1,254 @@
+{
+  "images": [
+    {
+      "slug": "about-me",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2011/05/mewhiteshirt-200x200.jpg",
+      "description": "Me!"
+    },
+    {
+      "slug": "lieutenant-civilian-and-military-police",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2011/11/mor-ktzina-pasport-243x300.jpg",
+      "description": "Second Lieutenant Me"
+    },
+    {
+      "slug": "massive-is-attractive",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2011/05/582749main_sunrise_from_iss-4x3_946-710-300x225.jpg",
+      "description": "captioned \"Sunrise from Space, Credit: NASA Image of the Day Gallery\""
+    },
+    {
+      "slug": "physics-of-the-tooth-fairy",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2011/04/flickr_toothfairy-300x300.jpg",
+      "description": "Credit: Jenn and Tony Bot via Flickr"
+    },
+    {
+      "slug": "ultimate-betrayal",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2011/11/flickr_bliss_Navdeep_Raj-300x200.jpg",
+      "description": "(no alt text)"
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "src": "https://lit.smarterthanthat.com/wp-content/uploads/2013/11/flames-300x199.jpg",
+      "description": "flames"
+    }
+  ],
+  "removed": [
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "image credit: \"Photo Credit: Edson Martins, Flickr\""
+    }
+  ],
+  "rewritten": [
+    {
+      "slug": "the-forbidden-fruit",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "bootcamp",
+      "what": "Amazon widget → book link",
+      "count": 1
+    },
+    {
+      "slug": "bootcamp",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "bootcamp",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "mr-heart-and-mrs-brain",
+      "what": "Amazon widget → book link",
+      "count": 1
+    },
+    {
+      "slug": "mr-heart-and-mrs-brain",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "valentines-day-poem",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "snippets-of-wisdom",
+      "what": "Amazon widget → book link",
+      "count": 1
+    },
+    {
+      "slug": "snippets-of-wisdom",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "snippets-of-wisdom",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "god-says-no",
+      "what": "Amazon widget → book link",
+      "count": 1
+    },
+    {
+      "slug": "god-says-no",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "the-summer-i-was-seventeen",
+      "what": "-- separator → scene break",
+      "count": 1
+    },
+    {
+      "slug": "the-summer-i-was-seventeen",
+      "what": "empty &nbsp; paragraph removed",
+      "count": 1
+    },
+    {
+      "slug": "the-summer-i-was-seventeen",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "heat",
+      "what": "trailing &nbsp; removed",
+      "count": 1
+    },
+    {
+      "slug": "heat",
+      "what": "bare <div> unwrapped",
+      "count": 2
+    },
+    {
+      "slug": "heat",
+      "what": "loose text wrapped in a paragraph",
+      "count": 1
+    },
+    {
+      "slug": "massive-is-attractive",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "physics-of-the-tooth-fairy",
+      "what": "leading &nbsp; line removed",
+      "count": 1
+    },
+    {
+      "slug": "physics-of-the-tooth-fairy",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "i-noticed",
+      "what": "Amazon widget → book link",
+      "count": 1
+    },
+    {
+      "slug": "i-noticed",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "headless",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "ultimate-betrayal",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "ultimate-betrayal",
+      "what": "empty &nbsp; paragraph removed",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "edited: \"Based on existing comments, I am\" → \"I am\"",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "edited: \"send it out to the world and get some feedback on it.\" → \"send it out to the world.\"",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "edited: \"Please feel free to comment, make suggestions, and tell me what worked for you and what didn't. Hopefully this will let me rewrite and reorganize this short story into a much better and less rushed piece that you can all enjoy!\" → \"\"",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "edited: \"Thanks in advance and enjoy the reading!\" → \"Enjoy the reading!\"",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "centered * * * → scene break",
+      "count": 10
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "notice box → author-note aside",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "h4 → h2 (the page title is the only h1)",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "h4 → h2 (closing)",
+      "count": 1
+    },
+    {
+      "slug": "telemarketing-call-from-hell",
+      "what": "small-print span → <small>",
+      "count": 1
+    },
+    {
+      "slug": "injured-stories",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "an-ode-to-an-ordinary-thing",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "the-box",
+      "what": "* * * → scene break",
+      "count": 1
+    },
+    {
+      "slug": "the-box",
+      "what": "trailing line break removed",
+      "count": 1
+    },
+    {
+      "slug": "a-message-from-space",
+      "what": "* * * → scene break",
+      "count": 2
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "lieutenant-civilian-and-military-police",
+      "title": "Lieutenant Civilian and Military Police",
+      "reason": "WordPress draft; not imported (text stays in the export)"
+    },
+    {
+      "slug": "contact",
+      "title": "Contact Me",
+      "reason": "page replaced by a link to https://moriel.tech/contact"
+    }
+  ]
+}
