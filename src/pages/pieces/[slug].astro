@@ -150,15 +150,9 @@ const jsonLd = {
   }
 
   /*
-   * Stories and flash fiction open with the first line in small caps, as books often do. Not a
-   * drop cap: many pieces open with a one-line paragraph of dialogue, which a float would break.
+   * Stories and flash fiction open with an accented first letter. Not a drop cap: many pieces
+   * open with a one-line paragraph of dialogue, which a float would break.
    */
-  .piece-story .piece-content > :global(p:first-child::first-line),
-  .piece-flash .piece-content > :global(p:first-child::first-line) {
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.05em;
-  }
-
   .piece-story .piece-content > :global(p:first-child::first-letter),
   .piece-flash .piece-content > :global(p:first-child::first-letter) {
     color: var(--accent);
