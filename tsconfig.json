@@ -1,5 +1,14 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "tools/*/node_modules", "tools/*/out", "tools/*/.cache"]
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "tools/*/node_modules",
+    "tools/*/out",
+    "tools/*/.cache",
+    "tools/wp-import"
+  ]
 }
