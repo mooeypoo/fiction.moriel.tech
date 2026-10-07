@@ -25,6 +25,7 @@ npm run audio -- <slug>      # generate a piece's audio locally (after npm run a
 - `src/lib/markdown-plugins.mjs`: wraps each line of a paragraph with line breaks in `<span class="line">` (poems' hanging indents), and marks external links.
 - `tests/unit/`: fast tests of pure logic. `tests/site/`: checks on the built `dist/` (links, unlisted pages, line breaks, audio text).
 - `tools/listen-audio/`: the audio generator, a separate package so Netlify never installs it.
+- `public/_redirects`: Netlify redirects. The generated block maps every old lit.smarterthanthat.com URL (`tools/wp-import/redirects.ts`); add new redirects by hand above it. `tests/site/redirects.test.ts` checks every old URL reaches a page.
 - `tools/wp-import/`: the one-off WordPress migration, kept for reference.
 
 ## Things that are easy to break
