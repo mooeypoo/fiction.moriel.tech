@@ -18,7 +18,7 @@ Julie Thorn is a secretary at a big corporation with an annoying boss and a bori
 
 ## Author's Note
 
-This story was written for a fiction writing workshop two years ago as part of a final short story project. I am considering transforming this short story into a much more balanced and non-rushed novella, where I can flush out the characters and solidify the idea.
+This story was written for a fiction writing workshop as part of a final short story project. I am considering transforming this short story into a much more balanced and non-rushed novella, where I can flesh out the characters and solidify the idea.
 
 This piece is marked as "Working Draft" because while it's technically finished, I think it has potential to be a whole lot better. There are several issues I would like to improve and rewrite so I can deliver the message a bit more clearly, and produce more well rounded characters. The story sat in my drawer for two years, and I finally thought it might be time to send it out to the world.
 
