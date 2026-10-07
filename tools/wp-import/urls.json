@@ -1,0 +1,333 @@
+[
+  {
+    "id": "4",
+    "type": "post",
+    "status": "publish",
+    "slug": "the-forbidden-fruit",
+    "link": "https://lit.smarterthanthat.com/prose/the-forbidden-fruit/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Critical Thinking",
+      "Fiction",
+      "Religion"
+    ]
+  },
+  {
+    "id": "10",
+    "type": "post",
+    "status": "publish",
+    "slug": "bootcamp",
+    "link": "https://lit.smarterthanthat.com/prose/bootcamp/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Military",
+      "Personal"
+    ]
+  },
+  {
+    "id": "12",
+    "type": "post",
+    "status": "publish",
+    "slug": "mr-heart-and-mrs-brain",
+    "link": "https://lit.smarterthanthat.com/prose/mr-heart-and-mrs-brain/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Fiction",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "13",
+    "type": "post",
+    "status": "publish",
+    "slug": "valentines-day-poem",
+    "link": "https://lit.smarterthanthat.com/poem/valentines-day-poem/",
+    "categories": [
+      "poem"
+    ],
+    "tags": []
+  },
+  {
+    "id": "16",
+    "type": "post",
+    "status": "publish",
+    "slug": "snippets-of-wisdom",
+    "link": "https://lit.smarterthanthat.com/prose/snippets-of-wisdom/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Personal"
+    ]
+  },
+  {
+    "id": "17",
+    "type": "post",
+    "status": "publish",
+    "slug": "one-million",
+    "link": "https://lit.smarterthanthat.com/poem/one-million/",
+    "categories": [
+      "poem"
+    ],
+    "tags": [
+      "Critical Thinking",
+      "Personal",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "18",
+    "type": "page",
+    "status": "publish",
+    "slug": "about-me",
+    "link": "https://lit.smarterthanthat.com/about-me/",
+    "categories": [],
+    "tags": []
+  },
+  {
+    "id": "23",
+    "type": "post",
+    "status": "publish",
+    "slug": "god-says-no",
+    "link": "https://lit.smarterthanthat.com/poem/god-says-no/",
+    "categories": [
+      "poem"
+    ],
+    "tags": [
+      "Religion",
+      "Weird"
+    ]
+  },
+  {
+    "id": "30",
+    "type": "post",
+    "status": "draft",
+    "slug": "lieutenant-civilian-and-military-police",
+    "link": "https://lit.smarterthanthat.com/?p=30",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Military",
+      "Personal"
+    ]
+  },
+  {
+    "id": "37",
+    "type": "page",
+    "status": "publish",
+    "slug": "contact",
+    "link": "https://lit.smarterthanthat.com/contact/",
+    "categories": [],
+    "tags": []
+  },
+  {
+    "id": "5",
+    "type": "post",
+    "status": "publish",
+    "slug": "the-summer-i-was-seventeen",
+    "link": "https://lit.smarterthanthat.com/prose/the-summer-i-was-seventeen/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Military",
+      "Personal"
+    ]
+  },
+  {
+    "id": "6",
+    "type": "post",
+    "status": "publish",
+    "slug": "heat",
+    "link": "https://lit.smarterthanthat.com/prose/heat/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Descriptive",
+      "Personal"
+    ]
+  },
+  {
+    "id": "8",
+    "type": "post",
+    "status": "publish",
+    "slug": "massive-is-attractive",
+    "link": "https://lit.smarterthanthat.com/prose/massive-is-attractive/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Descriptive",
+      "Fiction"
+    ]
+  },
+  {
+    "id": "9",
+    "type": "post",
+    "status": "publish",
+    "slug": "physics-of-the-tooth-fairy",
+    "link": "https://lit.smarterthanthat.com/prose/physics-of-the-tooth-fairy/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Critical Thinking",
+      "Personal"
+    ]
+  },
+  {
+    "id": "14",
+    "type": "post",
+    "status": "publish",
+    "slug": "i-noticed",
+    "link": "https://lit.smarterthanthat.com/prose/i-noticed/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Personal",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "15",
+    "type": "post",
+    "status": "publish",
+    "slug": "slow-down-time",
+    "link": "https://lit.smarterthanthat.com/prose/slow-down-time/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Personal",
+      "Weird"
+    ]
+  },
+  {
+    "id": "21",
+    "type": "post",
+    "status": "publish",
+    "slug": "headless",
+    "link": "https://lit.smarterthanthat.com/prose/headless/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Fiction",
+      "Weird"
+    ]
+  },
+  {
+    "id": "32",
+    "type": "post",
+    "status": "publish",
+    "slug": "ultimate-betrayal",
+    "link": "https://lit.smarterthanthat.com/prose/ultimate-betrayal/",
+    "categories": [
+      "prose"
+    ],
+    "tags": [
+      "Critical Thinking",
+      "Descriptive",
+      "Fiction",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "50",
+    "type": "post",
+    "status": "publish",
+    "slug": "telemarketing-call-from-hell",
+    "link": "https://lit.smarterthanthat.com/prose/telemarketing-call-from-hell/",
+    "categories": [
+      "prose",
+      "short-story"
+    ],
+    "tags": [
+      "Descriptive",
+      "Fiction",
+      "Religion",
+      "sarcasm",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "57",
+    "type": "post",
+    "status": "publish",
+    "slug": "injured-stories",
+    "link": "https://lit.smarterthanthat.com/poem/injured-stories/",
+    "categories": [
+      "poem"
+    ],
+    "tags": []
+  },
+  {
+    "id": "58",
+    "type": "post",
+    "status": "publish",
+    "slug": "fleeting-concentration",
+    "link": "https://lit.smarterthanthat.com/prose/fleeting-concentration/",
+    "categories": [
+      "flash-fiction",
+      "prose"
+    ],
+    "tags": [
+      "Descriptive",
+      "Fiction",
+      "sarcasm"
+    ]
+  },
+  {
+    "id": "59",
+    "type": "post",
+    "status": "publish",
+    "slug": "an-ode-to-an-ordinary-thing",
+    "link": "https://lit.smarterthanthat.com/poem/an-ode-to-an-ordinary-thing/",
+    "categories": [
+      "poem"
+    ],
+    "tags": [
+      "Weird"
+    ]
+  },
+  {
+    "id": "60",
+    "type": "post",
+    "status": "publish",
+    "slug": "the-box",
+    "link": "https://lit.smarterthanthat.com/prose/the-box/",
+    "categories": [
+      "flash-fiction",
+      "prose"
+    ],
+    "tags": [
+      "Descriptive",
+      "Symbolic"
+    ]
+  },
+  {
+    "id": "61",
+    "type": "post",
+    "status": "publish",
+    "slug": "a-message-from-space",
+    "link": "https://lit.smarterthanthat.com/prose/a-message-from-space/",
+    "categories": [
+      "flash-fiction",
+      "prose"
+    ],
+    "tags": [
+      "Critical Thinking",
+      "sarcasm",
+      "Weird"
+    ]
+  }
+]

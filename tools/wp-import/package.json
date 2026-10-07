@@ -1,0 +1,17 @@
+{
+  "name": "wp-import",
+  "private": true,
+  "type": "module",
+  "description": "One-off WordPress (WXR) to Markdown migration for lit.smarterthanthat.com. Kept apart from the site so Netlify builds don't install it.",
+  "scripts": {
+    "import": "node --experimental-strip-types import.ts",
+    "compare": "node --experimental-strip-types compare.ts"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "linkedom": "0.18.13",
+    "turndown": "7.2.4"
+  }
+}

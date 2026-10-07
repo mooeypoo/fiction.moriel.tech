@@ -1,0 +1,21 @@
+---
+// Phase 2 placeholder: unstyled, only to check the converted content renders. Replaced in Phase 3.
+import { getCollection, render } from 'astro:content'
+
+export async function getStaticPaths() {
+  const pieces = await getCollection('pieces', ({ data }) => import.meta.env.DEV || !data.draft)
+  return pieces.map((piece) => ({ params: { slug: piece.id }, props: { piece } }))
+}
+
+const { piece } = Astro.props
+const { Content } = await render(piece)
+---
+<html lang="en">
+  <head><meta charset="utf-8" /><title>{piece.data.title}</title></head>
+  <body>
+    <article>
+      <header class="post-header"><h1>{piece.data.title}</h1></header>
+      <div class="post-content"><Content /></div>
+    </article>
+  </body>
+</html>
